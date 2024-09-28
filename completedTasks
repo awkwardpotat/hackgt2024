@@ -46,16 +46,19 @@
     <button class="back-button" onclick="goBack()">Go Back</button>
 
     <script>
-        // Sample completed tasks; you can replace this with your actual tasks.
-        const completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || [];
+        // Retrieve completed tasks from local storage
+        function loadCompletedTasks() {
+            return JSON.parse(localStorage.getItem('completedTasks')) || [];
+        }
 
         // Function to display completed tasks
         function displayTasks() {
             const taskList = document.getElementById('taskList');
+            const completedTasks = loadCompletedTasks();
             completedTasks.forEach(task => {
                 const listItem = document.createElement('li');
                 listItem.className = 'task-item';
-                listItem.textContent = task;
+                listItem.textContent = task.text; // Accessing the task text
                 taskList.appendChild(listItem);
             });
         }
@@ -65,7 +68,7 @@
 
         // Function to go back to the previous page (or wherever you'd like)
         function goBack() {
-            window.location.href = 'main.html'; // Change to your desired page
+            window.location.href = 'ToDo.html'; // Change to your desired page
         }
     </script>
 </body>
