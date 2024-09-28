@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Interaction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .cat-image {
+            width: 300px;
+            position: relative;
+        }
+        .hand {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-image: url('https://i.imgur.com/6ZK7gF6.png'); /* Hand image */
+            background-size: cover;
+            display: none;
+            animation: pet 1s forwards;
+        }
+        @keyframes pet {
+            0% { top: -50px; }
+            50% { top: 50px; }
+            100% { top: 0; }
+        }
+        .heart {
+            position: absolute;
+            color: red;
+            font-size: 24px;
+            animation: heart-animation 1s forwards;
+        }
+        @keyframes heart-animation {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+        .button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <h1>Meet the Cat!</h1>
+    <img src="https://i.imgur.com/ZfS2b4f.png" alt="Cute Cat" class="cat-image" id="catImage">
+    <div class="hand" id="hand"></div>
+    
+    <button class="button" id="petButton" onclick="petCat()">Pet the Cat</button>
+    <button class="button" id="feedButton" onclick="feedCat()">Feed the Cat</button>
+
+    <h2 id="status">Interactions left: 5</h2>
+    
+    <script>
+        let interactions = 0;
+        const maxInteractions = 5;
+
+        function petCat() {
+            if (interactions < maxInteractions) {
+                interactions++;
+                animateHand();
+                showHearts();
+                updateStatus();
+            }
+        }
+
+        function feedCat() {
+            if (interactions < maxInteractions) {
+                interactions++;
+                showHappyCat();
+                updateStatus();
+            }
+        }
+
+        function animateHand() {
+            const hand = document.getElementById('hand');
+            hand.style.display = 'block';
+            hand.style.top = '0'; // Reset position
+            setTimeout(() => {
+                hand.style.display = 'none';
+            }, 1000);
+        }
+
+        function showHearts() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = Math.random() * 100 + 'vh';
+            document.body.appendChild(heart);
+            setTimeout(() => {
+                heart.remove();
+            }, 1000);
+        }
+
+        function showHappyCat() {
+            // Change cat image or add some animation here if desired
+            alert('Yummy! The cat is happy!');
+        }
+
+        function updateStatus() {
+            const status = document.getElementById('status');
+            status.innerText = `Interactions left: ${maxInteractions - interactions}`;
+            if (interactions >= maxInteractions) {
+                disableButtons();
+            }
+        }
+
+        function disableButtons() {
+            document.getElementById('petButton').classList.add('disabled');
+            document.getElementById('feedButton').classList.add('disabled');
+            document.getElementById('petButton').disabled = true;
+            document.getElementById('feedButton').disabled = true;
+            alert('The cat is bored and doesn\'t want to play anymore.');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Selector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 400px;
+        }
+        select {
+            margin: 10px 0;
+            padding: 5px;
+            font-size: 16px;
+        }
+        h2 {
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <label for="hours">Select Hour:</label>
+        <select id="hours" onchange="updateTitle()">
+            <option value="">--Select Hour--</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+        </select>
+
+        <label for="minutes">Select Minute:</label>
+        <select id="minutes" onchange="updateTitle()">
+            <option value="">--Select Minute--</option>
+            <option value="00">00</option>
+            <option value="05">05</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+            <option value="35">35</option>
+            <option value="40">40</option>
+            <option value="45">45</option>
+            <option value="50">50</option>
+            <option value="55">55</option>
+        </select>
+        
+        <h2 id="selectedTime">Selected Time: --:--</h2>
+    </div>
+
+    <script>
+        function updateTitle() {
+            const hours = document.getElementById('hours').value;
+            const minutes = document.getElementById('minutes').value;
+
+            const selectedTime = (hours && minutes) ? `${hours}:${minutes}` : '--:--';
+            document.getElementById('selectedTime').textContent = `Selected Time: ${selectedTime}`;
+        }
+    </script>
+</body>
+</html>
