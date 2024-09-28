@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #B2E6D4;
+        }
+        h1, h2 {
+            color: #689689;
+        }
+        #new-task-input {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #689689;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px; /* Add margin for spacing */
+        }
+        button:hover {
+            background-color: #A49E8D;
+        }
+        .task {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #FFFFFF;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .line-through {
+            text-decoration: line-through;
+            color: gray;
+        }
+        .task p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>To-Do List</h1>
+    <input type="text" id="new-task-input" placeholder="New task...">
+    <button id="add-task-button">Add Task</button>
+    
+    <h2>Tasks</h2>
+    <div id="task-container"></div>
+    
+    <h2>Completed Tasks</h2>
+    <button id="view-completed-tasks-button">View Completed Tasks</button>
+    <button id="procrastinate-button">Procrastinate</button> <!-- New Procrastinate Button -->
+
+    <script>
+        const INCOMPLETE_TASKS_KEY = 'incompleteTasks';
+        const COMPLETED_TASKS_KEY = 'completedTasks';
+
+        function loadTasks(key) {
+            const tasksJSON = localStorage.getItem(key);
+            return tasksJSON ? JSON.parse(tasksJSON) : [];
+        }
+
+        function saveTasks(key, tasks) {
+            localStorage.setItem(key, JSON.stringify(tasks));
+        }
+
+        function renderTasks() {
+            const incompleteTasks = loadTasks(INCOMPLETE_TASKS_KEY);
+            const taskContainer = document.getElementById('task-container');
+            taskContainer.innerHTML = '';
+            incompleteTasks.forEach((task, index) => {
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'task';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = task.completed || false;
+                checkbox.addEventListener('click', () => {
+                    task.completed = checkbox.checked;
+                    saveTasks(INCOMPLETE_TASKS_KEY, incompleteTasks);
+                    renderTasks(); // Re-render to update the view
+                });
+
+                const paragraph = document.createElement('p');
+                paragraph.textContent = task.text;
+                if (task.completed) {
+                    paragraph.classList.add('line-through');
+                }
+
+                taskDiv.appendChild(checkbox);
+                taskDiv.appendChild(paragraph);
+                taskContainer.appendChild(taskDiv);
+            });
+        }
+
+        function addTask() {
+            const taskInput = document.getElementById('new-task-input');
+            const taskText = taskInput.value.trim();
+            if (taskText) {
+                const incompleteTasks = loadTasks(INCOMPLETE_TASKS_KEY);
+                incompleteTasks.push({ text: taskText, completed: false });
+                saveTasks(INCOMPLETE_TASKS_KEY, incompleteTasks);
+                renderTasks();
+                taskInput.value = '';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', renderTasks);
+        document.getElementById('add-task-button').addEventListener('click', addTask);
+        document.getElementById('view-completed-tasks-button').addEventListener('click', () => {
+            const incompleteTasks = loadTasks(INCOMPLETE_TASKS_KEY);
+            const completedTasks = loadTasks(COMPLETED_TASKS_KEY);
+            incompleteTasks.forEach(task => {
+                if (task.completed) {
+                    completedTasks.push(task);
+                }
+            });
+            const remainingTasks = incompleteTasks.filter(task => !task.completed);
+            saveTasks(INCOMPLETE_TASKS_KEY, remainingTasks);
+            saveTasks(COMPLETED_TASKS_KEY, completedTasks);
+            window.location.href = 'completedTasks.html';
+        });
+        
+        // Add event listener for procrastinate button
+        document.getElementById('procrastinate-button').addEventListener('click', () => {
+            window.location.href = 'cat.html'; // Redirect to cat page
+        });
+    </script>
+</body>
+</html>
