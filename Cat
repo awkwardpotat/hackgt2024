@@ -26,7 +26,7 @@
         }
         @keyframes pet {
             0% { top: -50px; }
-            50% { top: 100px; } /* Adjusted to bring the hand closer to the cat */
+            50% { top: 100px; } /* Hand moves down to pet */
             100% { top: 0; }
         }
         .heart {
@@ -124,7 +124,7 @@
 
         // Retrieve bedtime and wakeup time from local storage
         const bedtime = JSON.parse(localStorage.getItem('bedtime'));
-        const wakeupTime = JSON.parse(localStorage.getItem('wakeup')); // Fixed variable name here
+        const wakeupTime = JSON.parse(localStorage.getItem('wakeup'));
 
         function isCatTired() {
             const now = new Date();
@@ -136,7 +136,7 @@
                 const bedHour = parseInt(bedtime.hour);
                 const bedMinute = parseInt(bedtime.minutes);
                 const wakeHour = parseInt(wakeupTime.hour);
-                const wakeMinute = parseInt(wakeupTime.minutes); // Fixed variable name here
+                const wakeMinute = parseInt(wakeupTime.minutes);
                 
                 const bedtimeMinutes = convertTo24Hour(bedHour, bedMinute, bedtime.amPm);
                 const wakeupMinutes = convertTo24Hour(wakeHour, wakeMinute, wakeupTime.amPm);
@@ -164,7 +164,7 @@
         function petCat() {
             if (interactions < maxInteractions && !isCatTired()) {
                 interactions++;
-                animateHand();
+                animateHand(); // Keep hand animation
                 showHearts();
                 updateStatus();
             }
@@ -206,31 +206,12 @@
 
         function updateStatus() {
             const status = document.getElementById('status');
-            status.innerText = `Interactions left: ${maxInteractions - interactions}`;
-            
-            if (interactions >= maxInteractions) {
-                disableButtons();
-                alert('The cat is bored and doesn\'t want to play anymore.');
-                // Hide the cat image
-                document.getElementById('catImage').style.display = 'none'; // Hide the regular cat image
-                document.getElementById('sleepingCat').style.display = 'none'; // Ensure sleeping cat is also hidden
-            }
-
-            // Check if cat is bored based on task completion
-            const taskCompletionPercentage = (completedTasks / totalTasks) * 100;
-            if (taskCompletionPercentage < 25) {
-                disableButtons();
-                alert('The cat is bored because not enough tasks are completed.');
-                // Hide the cat image
-                document.getElementById('catImage').style.display = 'none'; // Hide the regular cat image
-                document.getElementById('sleepingCat').style.display = 'none'; // Ensure sleeping cat is also hidden
-            }
+            const remaining = maxInteractions - interactions;
+            status.innerText = `Interactions left: ${remaining}`;
         }
 
-        function disableButtons() {
-            document.getElementById('petButton').disabled = true;
-            document.getElementById('foodBowl').onclick = null; // Disable feeding
-        }
+        // Initialize the cat tiredness check
+        window.onload = isCatTired;
     </script>
 </body>
 </html>
