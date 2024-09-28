@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cat Interaction</title>
+    <title>Play with the Cat</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 20px;
+            background-color: #B2E6D4; /* Matching background */
         }
         .cat-image {
             width: 300px;
@@ -16,16 +17,16 @@
         }
         .hand {
             position: absolute;
-            width: 50px;
-            height: 50px;
-            background-image: url('https://i.imgur.com/6ZK7gF6.png'); /* Hand image */
+            width: 70px;
+            height: 70px;
+            background-image: url('https://static.vecteezy.com/system/resources/previews/011/888/284/original/hand-gesture-cartoon-free-png.png'); /* Hand image */
             background-size: cover;
             display: none;
             animation: pet 1s forwards;
         }
         @keyframes pet {
             0% { top: -50px; }
-            50% { top: 50px; }
+            50% { top: 100px; } /* Adjusted to bring the hand closer to the cat */
             100% { top: 0; }
         }
         .heart {
@@ -44,36 +45,124 @@
             padding: 10px 15px;
             font-size: 16px;
             cursor: pointer;
-            background-color: #007BFF;
+            background-color: #689689; /* Button color matching */
             color: white;
             border: none;
             border-radius: 5px;
         }
         .button:hover {
-            background-color: #0056b3;
+            background-color: #A49E8D; /* Button hover color */
         }
         .disabled {
             background-color: #ccc;
             cursor: not-allowed;
         }
+        .food-bowl {
+            width: 20%;
+            height: 20%;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .todo-button {
+            background-color: white;
+            color: black;
+            font-size: 16px;
+            cursor: pointer;
+            border: 2px solid #689689;
+            margin-bottom: 20px; /* Add margin to separate from title */
+            position: absolute;
+            top: 20px;
+            right: 20px; /* Position for to-do list button */
+        }
+        .todo-button:hover {
+            text-decoration: none;
+            background-color: #689689;
+        }
+        .settings-button {
+            background: none;
+            border: none;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            cursor: pointer;
+            background-image: url('https://th.bing.com/th/id/R.e34181b9aca248dada783307e3cb891d?rik=%2fM6r6DDRa5nh5g&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2fj%2fV%2fR%2f4%2f3%2fs%2fcog-cogwheel-gear-zahnrad-hi.png&ehk=bK4l2dDqS%2fP8ARsO9etvAs3JBEIuMycAWod0Yd9YKAw%3d&risl=&pid=ImgRaw&r=0'); /* Gear icon */
+            background-size: 40px; /* Adjust size as needed */
+            width: 40px;
+            height: 40px;
+            outline: none;
+        }
+        .settings-button.disabled {
+            pointer-events: none; /* Disable clicks */
+            opacity: 0.5; /* Visual cue that it's disabled */
+        }
     </style>
 </head>
 <body>
-    <h1>Meet the Cat!</h1>
-    <img src="https://i.imgur.com/ZfS2b4f.png" alt="Cute Cat" class="cat-image" id="catImage">
-    <div class="hand" id="hand"></div>
+    <button class="settings-button" id="settingsButton" onclick="window.location.href='Time Setter.html'"></button>
+    <button class="todo-button" onclick="window.location.href='ToDo.html'">To-Do List</button>
+    
+    <h1>Play with the Cat</h1>
+    <div style="position: relative;">
+        <img src="https://static.vecteezy.com/system/resources/previews/013/078/569/non_2x/illustration-of-cute-colored-cat-cartoon-cat-image-in-format-suitable-for-children-s-book-design-elements-introduction-of-cats-to-children-books-or-posters-about-animal-free-png.png" alt="Cute Cat" class="cat-image" id="catImage">
+        <img src="https://example.com/sleeping-cat.png" alt="Sleeping Cat" class="cat-image" id="sleepingCat" style="display: none;"> <!-- Replace with actual sleeping cat image URL -->
+        <div class="hand" id="hand"></div>
+    </div>
     
     <button class="button" id="petButton" onclick="petCat()">Pet the Cat</button>
-    <button class="button" id="feedButton" onclick="feedCat()">Feed the Cat</button>
+    <img src="https://static.vecteezy.com/system/resources/previews/027/182/512/original/dry-dog-food-in-a-bowl-isolated-on-a-transparent-background-png.png" alt="Food Bowl" class="food-bowl" id="foodBowl" onclick="feedCat()">
 
     <h2 id="status">Interactions left: 5</h2>
     
     <script>
         let interactions = 0;
         const maxInteractions = 5;
+        let tiredAlertShown = false; // To prevent multiple alerts
+
+        // Example values; replace with actual logic
+        const completedTasks = 5; 
+        const totalTasks = 20; 
+
+        // Retrieve bedtime and wakeup time from local storage
+        const bedtime = JSON.parse(localStorage.getItem('bedtime'));
+        const wakeupTime = JSON.parse(localStorage.getItem('wakeup')); // Fixed variable name here
+
+        function isCatTired() {
+            const now = new Date();
+            const currentHours = now.getHours();
+            const currentMinutes = now.getMinutes();
+            const currentTime = currentHours * 60 + currentMinutes; // Current time in minutes
+
+            if (bedtime && wakeupTime) {
+                const bedHour = parseInt(bedtime.hour);
+                const bedMinute = parseInt(bedtime.minutes);
+                const wakeHour = parseInt(wakeupTime.hour);
+                const wakeMinute = parseInt(wakeupTime.minutes); // Fixed variable name here
+                
+                const bedtimeMinutes = convertTo24Hour(bedHour, bedMinute, bedtime.amPm);
+                const wakeupMinutes = convertTo24Hour(wakeHour, wakeMinute, wakeupTime.amPm);
+
+                // Check if current time is between bedtime and wakeup time
+                const isTired = (bedtimeMinutes < wakeupMinutes)
+                    ? (currentTime >= bedtimeMinutes && currentTime < wakeupMinutes)
+                    : (currentTime >= bedtimeMinutes || currentTime < wakeupMinutes);
+
+                // Show/hide cat images based on tiredness
+                document.getElementById('catImage').style.display = isTired ? 'none' : 'block';
+                document.getElementById('sleepingCat').style.display = isTired ? 'block' : 'none';
+
+                return isTired;
+            }
+            return false; // Default case if no times are set
+        }
+
+        function convertTo24Hour(hour, minutes, amPm) {
+            if (amPm === 'PM' && hour < 12) hour += 12;
+            if (amPm === 'AM' && hour === 12) hour = 0;
+            return hour * 60 + minutes; // Return total minutes
+        }
 
         function petCat() {
-            if (interactions < maxInteractions) {
+            if (interactions < maxInteractions && !isCatTired()) {
                 interactions++;
                 animateHand();
                 showHearts();
@@ -82,7 +171,7 @@
         }
 
         function feedCat() {
-            if (interactions < maxInteractions) {
+            if (interactions < maxInteractions && !isCatTired()) {
                 interactions++;
                 showHappyCat();
                 updateStatus();
@@ -92,10 +181,11 @@
         function animateHand() {
             const hand = document.getElementById('hand');
             hand.style.display = 'block';
-            hand.style.top = '0'; // Reset position
+            hand.style.top = '80px'; // Adjust this value to position the hand over the cat's head
+            hand.style.left = '450px'; // Adjust this value to position the hand horizontally over the cat's head
             setTimeout(() => {
                 hand.style.display = 'none';
-            }, 1000);
+            }, 1000); // Show hand for 1 second
         }
 
         function showHearts() {
@@ -111,24 +201,35 @@
         }
 
         function showHappyCat() {
-            // Change cat image or add some animation here if desired
             alert('Yummy! The cat is happy!');
         }
 
         function updateStatus() {
             const status = document.getElementById('status');
             status.innerText = `Interactions left: ${maxInteractions - interactions}`;
+            
             if (interactions >= maxInteractions) {
                 disableButtons();
+                alert('The cat is bored and doesn\'t want to play anymore.');
+                // Hide the cat image
+                document.getElementById('catImage').style.display = 'none'; // Hide the regular cat image
+                document.getElementById('sleepingCat').style.display = 'none'; // Ensure sleeping cat is also hidden
+            }
+
+            // Check if cat is bored based on task completion
+            const taskCompletionPercentage = (completedTasks / totalTasks) * 100;
+            if (taskCompletionPercentage < 25) {
+                disableButtons();
+                alert('The cat is bored because not enough tasks are completed.');
+                // Hide the cat image
+                document.getElementById('catImage').style.display = 'none'; // Hide the regular cat image
+                document.getElementById('sleepingCat').style.display = 'none'; // Ensure sleeping cat is also hidden
             }
         }
 
         function disableButtons() {
-            document.getElementById('petButton').classList.add('disabled');
-            document.getElementById('feedButton').classList.add('disabled');
             document.getElementById('petButton').disabled = true;
-            document.getElementById('feedButton').disabled = true;
-            alert('The cat is bored and doesn\'t want to play anymore.');
+            document.getElementById('foodBowl').onclick = null; // Disable feeding
         }
     </script>
 </body>
