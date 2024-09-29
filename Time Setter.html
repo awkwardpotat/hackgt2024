@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #B2E6D4;
+        }
+        .container {
+            max-width: 400px;
+        }
+        select, .am-pm {
+            margin: 10px 5px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        h2 {
+            margin-top: 20px;
+            color: #333;
+        }
+        .time-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .time-selector span {
+            font-size: 20px;
+            margin: 0 5px;
+        }
+        .button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #689689;
+            color: white;
+            border: #689689;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #A49E8D;
+            color: white;
+        }
+        .back-button {
+            background-color: white;
+            color: black;
+            font-size: 16px;
+            cursor: pointer;
+            border: 2px solid #689689;
+            margin-bottom: 20px; /* Add margin to separate from title */
+        }
+        .back-button:hover {
+            text-decoration: none;
+            background-color: #689689;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='cat.html'">Back</button>
+
+    <div class="container">
+        <h1>Settings</h1>
+        
+        <h2>Select Bedtime:</h2>
+        <div class="time-selector">
+            <select id="bedtime" onchange="updateBedtime()">
+                <option value="">--Hour--</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+            <span>:</span>
+            <select id="bedtimeMinutes" onchange="updateBedtime()">
+                <option value="">--Minute--</option>
+                <option value="00">00</option>
+                <option value="05">05</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+                <option value="35">35</option>
+                <option value="40">40</option>
+                <option value="45">45</option>
+                <option value="50">50</option>
+                <option value="55">55</option>
+            </select>
+            <select id="bedtimeAmPm" class="am-pm" onchange="updateBedtime()">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+        </div>
+
+        <h2>Select Wake-Up Time:</h2>
+        <div class="time-selector">
+            <select id="wakeup" onchange="updateWakeup()">
+                <option value="">--Hour--</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+            <span>:</span>
+            <select id="wakeupMinutes" onchange="updateWakeup()">
+                <option value="">--Minute--</option>
+                <option value="00">00</option>
+                <option value="05">05</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+                <option value="35">35</option>
+                <option value="40">40</option>
+                <option value="45">45</option>
+                <option value="50">50</option>
+                <option value="55">55</option>
+            </select>
+            <select id="wakeupAmPm" class="am-pm" onchange="updateWakeup()">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+        </div>
+
+        <button class="button" onclick="saveSettings()">Save Settings</button>
+    </div>
+    
+    <script>
+        // Load saved settings on page load
+        window.onload = function() {
+            const savedBedtime = JSON.parse(localStorage.getItem('bedtime'));
+            const savedWakeup = JSON.parse(localStorage.getItem('wakeup'));
+            
+            if (savedBedtime) {
+                document.getElementById("bedtime").value = savedBedtime.hour;
+                document.getElementById("bedtimeMinutes").value = savedBedtime.minutes;
+                document.getElementById("bedtimeAmPm").value = savedBedtime.amPm;
+            }
+            
+            if (savedWakeup) {
+                document.getElementById("wakeup").value = savedWakeup.hour;
+                document.getElementById("wakeupMinutes").value = savedWakeup.minutes;
+                document.getElementById("wakeupAmPm").value = savedWakeup.amPm;
+            }
+        };
+
+        function updateBedtime() {
+            // Update bedtime logic if needed
+        }
+
+        function updateWakeup() {
+            // Update wakeup logic if needed
+        }
+
+        function saveSettings() {
+            const bedtimeHour = document.getElementById("bedtime").value;
+            const bedtimeMinutes = document.getElementById("bedtimeMinutes").value;
+            const bedtimeAmPm = document.getElementById("bedtimeAmPm").value;
+            const wakeupHour = document.getElementById("wakeup").value;
+            const wakeupMinutes = document.getElementById("wakeupMinutes").value;
+            const wakeupAmPm = document.getElementById("wakeupAmPm").value;
+
+            // Store settings in localStorage
+            localStorage.setItem('bedtime', JSON.stringify({ hour: bedtimeHour, minutes: bedtimeMinutes, amPm: bedtimeAmPm }));
+            localStorage.setItem('wakeup', JSON.stringify({ hour: wakeupHour, minutes: wakeupMinutes, amPm: wakeupAmPm }));
+
+            alert('Settings saved!');
+        }
+    </script>
+</body>
+</html>
