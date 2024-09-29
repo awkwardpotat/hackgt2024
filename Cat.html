@@ -104,12 +104,19 @@
     <h1>Play with the Cat</h1>
     <div style="position: relative;">
         <img src="https://static.vecteezy.com/system/resources/previews/013/078/569/non_2x/illustration-of-cute-colored-cat-cartoon-cat-image-in-format-suitable-for-children-s-book-design-elements-introduction-of-cats-to-children-books-or-posters-about-animal-free-png.png" alt="Cute Cat" class="cat-image" id="catImage">
-        <img src="https://example.com/sleeping-cat.png" alt="Sleeping Cat" class="cat-image" id="sleepingCat" style="display: none;"> <!-- Replace with actual sleeping cat image URL -->
+        <img src="https://png.pngtree.com/png-clipart/20230401/original/pngtree-sleeping-cat-png-image_9018663.png" alt="Sleeping Cat" class="cat-image" id="sleepingCat" style="display: none;" > <!-- Replace with actual sleeping cat image URL -->
+        <style>
+            .cat-image {
+                padding: 10px 300px;
+            }
+        </style>
         <div class="hand" id="hand"></div>
     </div>
     
     <button class="button" id="petButton" onclick="petCat()">Pet the Cat</button>
     <img src="https://static.vecteezy.com/system/resources/previews/027/182/512/original/dry-dog-food-in-a-bowl-isolated-on-a-transparent-background-png.png" alt="Food Bowl" class="food-bowl" id="foodBowl" onclick="feedCat()">
+    
+
 
     <h2 id="status">Interactions left: 5</h2>
     
@@ -118,22 +125,14 @@
         const maxInteractions = 5;
         let tiredAlertShown = false; // To prevent multiple alerts
 
+        // Example values; replace with actual logic
+        const completedTasks = 5; 
+        const totalTasks = 20; 
+
         // Retrieve bedtime and wakeup time from local storage
         const bedtime = JSON.parse(localStorage.getItem('bedtime'));
         const wakeupTime = JSON.parse(localStorage.getItem('wakeup'));
 
-        //THIS IS NEW
-        function loadTaskCounts(key) {
-            const tasksJSON = localStorage.getItem(key);
-            return tasksJSON.length ? JSON.parse(tasksJSON) : 0;
-        }
-
-        function isCatBored() {
-            const completedTasks = loadTaskCounts("completedTasks"); 
-            const totalTasks = loadTaskCounts("incompleteTasks") + completedTasks; 
-
-            return completedTasks.length / totalTasks.length * 100 > 50 ? false : true;
-        }
         function isCatTired() {
             const now = new Date();
             const currentHours = now.getHours();
@@ -211,23 +210,25 @@
         function showHappyCat() {
             alert('Yummy! The cat is happy!');
         }
-        
+
         function updateStatus() {
             const status = document.getElementById('status');
-
-            if (!isCatBored()) {
-                const remaining = maxInteractions - interactions;
-                status.innerText = `Interactions left: ${remaining}`;
-            } else {
-                status.innerText = 'the cat is bored -_-';
+            const remaining = maxInteractions - interactions;
+            if (isCatTired()) {
+                status.innerText = `Interactions left: ${0}`;
+                alert("The cat is sleeping now.");
             }
+            else{
+                status.innerText = `Interactions left: ${remaining}`;
+                if (remaining == 0) {
+                    alert("The cat is bored! Go do tasks!");
+                }
+            }
+            
         }
 
         // Initialize the cat tiredness check
         window.onload = isCatTired;
-
-        //
-        window.onload = updateStatus;
     </script>
 </body>
 </html>

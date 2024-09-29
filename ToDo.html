@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List</title>
+    <title>Procatination</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -52,7 +52,7 @@
     </style>
 </head>
 <body>
-    <h1>To-Do List</h1>
+    <h1>Procatination</h1>
     <input type="text" id="new-task-input" placeholder="New task...">
     <button id="add-task-button">Add Task</button>
     
@@ -74,10 +74,6 @@
 
         function saveTasks(key, tasks) {
             localStorage.setItem(key, JSON.stringify(tasks));
-            var x = loadTasks(INCOMPLETE_TASKS_KEY);
-            var y = loadTasks(COMPLETED_TASKS_KEY);
-            
-            //save the number of tasks here too
         }
 
         function renderTasks() {
@@ -144,4 +140,3 @@
     </script>
 </body>
 </html>
-<!--goal: store total task count into local storage-->
